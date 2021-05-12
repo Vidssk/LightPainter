@@ -2,7 +2,7 @@
 
 
 #include "PaintingGrid.h"
-
+#include "Components/HorizontalBoxSlot.h"
 #include "Components/SizeBox.h"
 
 void UPaintingGrid::AddPainting(int32 PaintingIndex,FString PaintingName)
@@ -26,4 +26,26 @@ void UPaintingGrid::ClearPaintings()
 		if (!CardContainer) return;
 		CardContainer->ClearChildren();
 	}
+}
+void UPaintingGrid::AddPaginationDot(bool Active)
+{
+	if (!PaginationDots) return;
+	auto Dot = CreateWidget<UPaginationDot>(GetWorld(), PaginationDotClass);
+	if (!Dot) return;
+	Dot->SetActive(Active);
+//	PaginationDots->AddChild(Dot);
+	UHorizontalBoxSlot* BoxSlot = PaginationDots->AddChildToHorizontalBox(Dot);
+	BoxSlot->SetPadding(FMargin(PaginationDotPadding, 0));
+
+}
+
+int32 UPaintingGrid::GetNumberOfSlots() const
+{
+	return PaintingGrid->GetChildrenCount();
+}
+
+void UPaintingGrid::ClearPaginationDots()
+{
+	if (!PaginationDots) return;
+	PaginationDots->ClearChildren();
 }
